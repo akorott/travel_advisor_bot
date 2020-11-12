@@ -24,7 +24,7 @@ my_reddit_obj = praw.Reddit(
 # target_country = []
 target_city = []
 
-robot_speech = "Hi, the historical weather forecast for the cities you're planning to visit is below  "
+robot_speech = "*beep beep boop*\n\nBelow is the historical weather forecast for your trip!"
 
 def extract_city(body_of_post):
     page = body_of_post
@@ -36,7 +36,7 @@ def extract_city(body_of_post):
 
 
 # Check to see if a country appears in the post title
-for submission in my_reddit_obj.subreddit('travel').new(limit=10):
+for submission in my_reddit_obj.subreddit('test').new(limit=2):
     if ('2021' in submission.title) or ('2021' in submission.selftext):
         post_body = submission.selftext
         city_body = extract_city(post_body)
@@ -64,8 +64,8 @@ for submission in my_reddit_obj.subreddit('travel').new(limit=10):
             if word.lower() in month_list:
                 months.append(word)
         for word in submission.selftext.split():
-            if word.lower().strip() in month_list:
-                months.append(word)
+            if word.lower().strip('.,') in month_list:
+                months.append(word.strip('.,'))
 
         print(months, "MONTHS")
 
@@ -76,8 +76,16 @@ for submission in my_reddit_obj.subreddit('travel').new(limit=10):
             for city in all_cities_final:
                 print(city, months)
                 resp = requests.get(f'https://weather-and-climate.com/{city}-{months}-averages')
-                if resp.status_code == 200:
-                    URL = f'https://weather-and-climate.com/{city}-{months}-averages'
-                    soup = BeautifulSoup(urlopen(URL), 'lxml')
-                    submission.reply(f'{robot_speech}\n{weather_test.forecast_details(city,months)}')
+                if resp.status_code != 200:
+                    all_cities_final.remove(city)
 
+            reply_string = ''
+            for i in range(len(all_cities_final)):
+                reply_string += f"\n{weather_test.forecast_details(all_cities_final[i],months)}"
+
+            print(robot_speech, reply_string)
+            submission.reply(robot_speech + reply_string)
+
+# To DO:
+# 1. Post for all cities in 1 comment
+# 2. Refactor code
