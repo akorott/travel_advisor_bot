@@ -1,8 +1,6 @@
-'travel-advisor' reddit bot:
+'weather_buddy' reddit bot:
 
-This bot is still a work in progress. 
-
-The bot parses posts on r/travel and responds with the following info (if the post meets the criteria):
+The bot parses posts on r/travel and responds with the following info (if the post meets certain criteria):
 
 City: Moscow
 Month: May
