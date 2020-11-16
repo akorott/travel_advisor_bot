@@ -12,6 +12,8 @@ country_list = ['afghanistan', 'albania', 'algeria', 'american samoa', 'andorra'
 # List of months
 month_list = ['january', 'jan', 'february', 'feb', 'march', 'mar', 'april', 'apr', 'may', 'june', 'july', 'august', 'aug', 'september', 'sep', 'october', 'oct', 'november', 'nov', 'december', 'dec']
 
+bot_name = 'weather_buddy'
+
 my_reddit_obj = praw.Reddit(
     client_id=os.environ.get("client_id"),
     client_secret=os.environ.get("client_secret"),
@@ -24,7 +26,7 @@ my_reddit_obj = praw.Reddit(
 robot_intro = "*beep beep boop - I'm the weather buddy*" + "\n\nHistorical weather forecast for your trip:"
 
 # Instantiate a subreddit object from my_reddit_obj
-subreddit = my_reddit_obj.subreddit('test')
+subreddit = my_reddit_obj.subreddit('travel')
 
 # Checks to see if a month is included either in the title or body of post.
 def month_checker(title, body):
@@ -61,7 +63,8 @@ def forecast_details(city,month):
 
 # Check to see if a country appears in the post title
 while True:
-    for submission in subreddit.new(limit=100):
+    for submission in subreddit.new(limit=500):
+        time.sleep(1000)
         all_authors = []
         if ('2021' in submission.title) or ('2021' in submission.selftext):
             print(submission.title)
@@ -69,7 +72,7 @@ while True:
                 all_authors.append(str(comment.author))
 
             # Ensure the bot hasn't already made a comment in the post.
-            if 'travel_advisor' not in all_authors:
+            if bot_name not in all_authors:
                 # city_body/city_title return a list of cities found in the title/body of the post
                 post_body = submission.selftext
                 city_body = extract_city(post_body)
@@ -105,6 +108,8 @@ while True:
                             if resp.status_code != 200:
                                 only_cities.remove(city)
 
+                        print(only_cities, 'THESE ARE THE CITIES')
+                        print(months, 'THIS IS THE MONTH')
                         if only_cities:
                             reply_string = ''
                             for i in range(len(only_cities)):
@@ -112,4 +117,4 @@ while True:
 
                             print(robot_intro, reply_string)
                             submission.reply(robot_intro + reply_string)
-    time.sleep(20)
+    time.sleep(60)
