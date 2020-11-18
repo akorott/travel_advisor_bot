@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import nltk
 
+# The below 4 nltk.download files need to be added to be able to deploy on heroku.com
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('maxent_ne_chunker')
@@ -32,7 +33,7 @@ my_reddit_obj = praw.Reddit(
 robot_intro = "*beep beep boop - I'm the weather buddy*" + "\n\nHistorical weather forecast for your trip:"
 
 # Instantiate a subreddit object from my_reddit_obj
-subreddit = my_reddit_obj.subreddit('test')
+subreddit = my_reddit_obj.subreddit('travel')
 
 # Checks to see if a month is included either in the title or body of post.
 def month_checker(title, body):
@@ -116,9 +117,9 @@ while True:
                             if resp.status_code == 200:
                                 good_cities.append(city)
 
-                        print('HERE')
                         if good_cities:
-                            time.sleep(10)
+                            print('Will make a post in a 1000 seconds', submission.title)
+                            time.sleep(1000)
                             reply_string = ''
                             for i in range(len(good_cities)):
                                 reply_string += f"\n{forecast_details(good_cities[i],months)}"
