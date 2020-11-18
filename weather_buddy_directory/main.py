@@ -126,7 +126,8 @@ while True:
 
                             print(robot_intro + reply_string)
                             submission.reply(robot_intro + reply_string)
+
+    # Sleep for 5 hours so that
     time.sleep(18000)
 
 
-# ISSUE IS THAT AFTER CHECKING RESPOSNE, ONE CITY IS REMOVED BUT NOT THE SECOND. WHY?!
