@@ -26,7 +26,7 @@ my_reddit_obj = praw.Reddit(
 robot_intro = "*beep beep boop - I'm the weather buddy*" + "\n\nHistorical weather forecast for your trip:"
 
 # Instantiate a subreddit object from my_reddit_obj
-subreddit = my_reddit_obj.subreddit('travel')
+subreddit = my_reddit_obj.subreddit('test')
 
 # Checks to see if a month is included either in the title or body of post.
 def month_checker(title, body):
@@ -63,8 +63,7 @@ def forecast_details(city,month):
 
 # Check to see if a country appears in the post title
 while True:
-    for submission in subreddit.new(limit=500):
-        time.sleep(1000)
+    for submission in subreddit.new(limit=1000):
         all_authors = []
         if ('2021' in submission.title) or ('2021' in submission.selftext):
             print(submission.title)
@@ -101,20 +100,25 @@ while True:
 
                     # Only provide results for the first month. I may come back and add a functionality for multiple months in the future.
                     # Make sure that the post includes both, a month and at least one city.
+
                     if months and only_cities:
                         months = months[0]
+                        # good_cities are cities that returned a response code of 200 and exist on the weather-and-climate website.
+                        good_cities = []
                         for city in only_cities:
                             resp = requests.get(f'https://weather-and-climate.com/{city}-{months}-averages')
-                            if resp.status_code != 200:
-                                only_cities.remove(city)
+                            if resp.status_code == 200:
+                                good_cities.append(city)
 
-                        print(only_cities, 'THESE ARE THE CITIES')
-                        print(months, 'THIS IS THE MONTH')
-                        if only_cities:
+                        if good_cities:
+                            time.sleep(1000)
                             reply_string = ''
-                            for i in range(len(only_cities)):
-                                reply_string += f"\n{forecast_details(only_cities[i],months)}"
+                            for i in range(len(good_cities)):
+                                reply_string += f"\n{forecast_details(good_cities[i],months)}"
 
-                            print(robot_intro, reply_string)
+                            print(robot_intro + reply_string)
                             submission.reply(robot_intro + reply_string)
     time.sleep(60)
+
+
+# ISSUE IS THAT AFTER CHECKING RESPOSNE, ONE CITY IS REMOVED BUT NOT THE SECOND. WHY?!
