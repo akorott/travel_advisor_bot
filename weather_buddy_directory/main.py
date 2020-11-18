@@ -70,7 +70,7 @@ def forecast_details(city,month):
 
 # Check to see if a country appears in the post title
 while True:
-    for submission in subreddit.new(limit=2000):
+    for submission in subreddit.new(limit=500):
         all_authors = []
         if ('2021' in submission.title) or ('2021' in submission.selftext):
             print(submission.title)
@@ -107,9 +107,9 @@ while True:
 
                     # Only provide results for the first month. I may come back and add a functionality for multiple months in the future.
                     # Make sure that the post includes both, a month and at least one city.
-
                     if months and only_cities:
                         months = months[0]
+
                         # good_cities are cities that returned a response code of 200 and exist on the weather-and-climate website.
                         good_cities = []
                         for city in only_cities:
@@ -118,7 +118,8 @@ while True:
                                 good_cities.append(city)
 
                         if good_cities:
-                            print('Will make a post in a 1000 seconds', submission.title)
+
+                            # Sleep for around 15 minutes so that the bot doesn't post too often.
                             time.sleep(1000)
                             reply_string = ''
                             for i in range(len(good_cities)):
@@ -127,7 +128,7 @@ while True:
                             print(robot_intro + reply_string)
                             submission.reply(robot_intro + reply_string)
 
-    # Sleep for 5 hours so that
-    time.sleep(18000)
+    # Script is deployed on Heroku. The script will run every 12 hours.
+    time.sleep(43200)
 
 
