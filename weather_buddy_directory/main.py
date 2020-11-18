@@ -111,7 +111,7 @@ while True:
                                 good_cities.append(city)
 
                         if good_cities:
-                            time.sleep(1000)
+                            # time.sleep(1000)
                             reply_string = ''
                             for i in range(len(good_cities)):
                                 reply_string += f"\n{forecast_details(good_cities[i],months)}"
