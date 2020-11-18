@@ -70,7 +70,7 @@ def forecast_details(city,month):
 
 # Check to see if a country appears in the post title
 while True:
-    for submission in subreddit.new(limit=1000):
+    for submission in subreddit.new(limit=2000):
         all_authors = []
         if ('2021' in submission.title) or ('2021' in submission.selftext):
             print(submission.title)
