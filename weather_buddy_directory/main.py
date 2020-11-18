@@ -26,7 +26,7 @@ my_reddit_obj = praw.Reddit(
 robot_intro = "*beep beep boop - I'm the weather buddy*" + "\n\nHistorical weather forecast for your trip:"
 
 # Instantiate a subreddit object from my_reddit_obj
-subreddit = my_reddit_obj.subreddit('travel')
+subreddit = my_reddit_obj.subreddit('test')
 
 # Checks to see if a month is included either in the title or body of post.
 def month_checker(title, body):
